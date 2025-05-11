@@ -3,7 +3,7 @@ const router = Router();
 const multer  = require('multer')
 const path=require("path")
 
-const Blog=require("../models/blog")
+const Blog=require("../models/blog");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, path.resolve("./public/uploads"));
@@ -21,6 +21,9 @@ router.get("/add-new",(req,res)=>{
     });
 })
 
+
+
+
 router.post("/",upload.single("coverImage"),async (req,res)=>{
     const {title,body}=req.body;
   const blog= await Blog.create({
@@ -32,5 +35,16 @@ router.post("/",upload.single("coverImage"),async (req,res)=>{
     return res.redirect('/');
 });
 
+router.get("/:id", async (req, res) => {
+  try {
+    const blog = await Blog.findById(req.params.id);
+    res.render("blogpage", {
+      user: req.user,
+      blog,
+    });
+  } catch (err) {
+    res.status(500).send("Blog not found");
+  }
+});
 
 module.exports = router;

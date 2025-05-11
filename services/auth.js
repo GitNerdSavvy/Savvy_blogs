@@ -12,7 +12,7 @@ function createUserToken(user){
     };
     const token=JWT.sign(payload, secret,{
         expiresIn:60*60*24
-    });
+    }); 
     return token;
 }
 
